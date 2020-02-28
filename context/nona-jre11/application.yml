@@ -1,0 +1,82 @@
+spring:
+  main:
+    banner-mode: "off"
+
+  jpa:
+    hibernate:
+      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+
+    open-in-view: true
+
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://mysql8:3306/nona}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD}
+
+
+# Servlet
+
+server:
+  servlet:
+    context-path: /${APP_NAME:nona}
+
+# Logback logging
+
+logging:
+  file: ./${APP_NAME:nona}.log
+  group:
+    mobetize: com.mobetize
+  level:
+    mobetize: ${MOBETIZE_LOGGING_LEVEL:DEBUG}
+    org.springframework.web: INFO
+    org.hibernate: INFO
+    org.hibernate.SQL: ${logging.level.mobetize}
+  pattern:
+    dateformat: yyy-MM-dd HH:mm:ss.SSS,UTC
+
+
+# Other
+
+nona:
+  etc:
+    apiUrlPrefix: ${NONA_API_URL_PREFIX:http://localhost:8080}
+    frontendUrlPrefix: ${NONA_FRONTEND_URL_PREFIX:http://localhost:3000}
+    corsMaxAge: ${NONA_CORS_MAX_AGE:4800}
+    uuid: ${random.uuid}
+
+  jwt:
+    secret: ${spring.datasource.username}.${spring.datasource.password}
+    expirationInS: ${NONA_JWT_EXPIRE:10800}
+
+  emailAuth:
+    urlPrefix: ${nona.etc.frontendUrlPrefix}/auth/
+    expirationInMs: 300000
+    quotaPeriodInHour: 6
+    quotaNumber: 30
+
+
+  fileAsset:
+    root: /webapps/resources/fileasset
+    encrypted: false
+
+
+  smtpParam:
+    password: "letsgetgoing"
+    security: "SSL"
+    supportEmail: "csnamchaiskul@mobetize.com"
+    port: 465
+    host: "smtp.gmail.com"
+    from: "donotreply@mobetize.com"
+    user: "donotreply@mobetize.com"
+
+  equifaxParam:
+    class: com.equifax.client.EquifaxFacadeImpl
+    host: "https://www.equifax.ca/efxws/STSRequest.asmx"
+    customerCode: "5087"
+    customerNumber: "601FC06984"
+    securityCode: "84"
+    environment: "A01PACK"
+    encrypted: true
